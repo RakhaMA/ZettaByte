@@ -1,11 +1,20 @@
 const readline = require('readline-sync');
 
-function calculatePrice(price, discountPercent, taxPercent) {
+function purchaseBook(stock, purchased) {
+  const TAX_RATE = 0.1; // 10% tax rate
+
+  let bookTitle = readline.question("Enter book title: ");
+  let author = readline.question("Enter author name: ");
+  let price = parseFloat(readline.question("Enter book price: "));
+  let discountPercent;
+  let taxPercent = parseFloat(readline.question("Enter tax percentage: "));
+
   let discountApplied = false;
   let discountAmount = 0;
   let discountedPrice = price;
 
-  if (price > 50000 && discountPercent > 0) {
+  if (price > 50000) {
+    discountPercent = parseFloat(readline.question("Enter discount percentage: "));
     discountAmount = price * (discountPercent / 100);
     discountedPrice = price - discountAmount;
     discountApplied = true;
@@ -13,27 +22,6 @@ function calculatePrice(price, discountPercent, taxPercent) {
 
   let taxAmount = discountedPrice * (taxPercent / 100);
   let priceAfterTax = discountedPrice + taxAmount;
-
-  return {
-    price: price,
-    discountApplied: discountApplied,
-    discountPercent: discountPercent,
-    discountAmount: discountAmount,
-    discountedPrice: discountedPrice,
-    taxPercent: taxPercent,
-    taxAmount: taxAmount,
-    priceAfterTax: priceAfterTax
-  };
-}
-
-function purchaseBook(stock, purchased) {
-  let bookTitle = readline.question("Enter book title: ");
-  let author = readline.question("Enter author name: ");
-  let price = parseFloat(readline.question("Enter book price: "));
-  let discountPercent = parseFloat(readline.question("Enter discount percentage (optional): "));
-  let taxPercent = parseFloat(readline.question("Enter tax percentage: "));
-
-  let priceDetails = calculatePrice(price, discountPercent, taxPercent);
 
   let totalPrice = 0;
   let outOfStock = false;
@@ -43,7 +31,7 @@ function purchaseBook(stock, purchased) {
       outOfStock = true;
       break;
     }
-    totalPrice += priceDetails.priceAfterTax;
+    totalPrice += priceAfterTax;
     stock--;
   }
 
@@ -51,14 +39,14 @@ function purchaseBook(stock, purchased) {
   console.log("Author:", author);
   console.log("Price:", price.toFixed(2));
   
-  if (priceDetails.discountApplied) {
-    console.log("Discount:", priceDetails.discountPercent + "%");
-    console.log("Discount amount:", priceDetails.discountAmount.toFixed(2));
-    console.log("Price after discount:", priceDetails.discountedPrice.toFixed(2));
+  if (discountApplied) {
+    console.log("Discount:", discountPercent + "%");
+    console.log("Discount amount:", discountAmount.toFixed(2));
+    console.log("Price after discount:", discountedPrice.toFixed(2));
   }
   
-  console.log("Tax:", priceDetails.taxPercent + "%");
-  console.log("Tax amount:", priceDetails.taxAmount.toFixed(2));
+  console.log("Tax:", taxPercent + "%");
+  console.log("Tax amount:", taxAmount.toFixed(2));
   console.log("Total price:", totalPrice.toFixed(2));
   
   if (outOfStock) {
