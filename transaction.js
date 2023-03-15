@@ -48,4 +48,5 @@ function purchaseBook(stock, purchased, creditTerm) {
 }
 
 // Example usage:
+// purchaseBook(stock, purchased, creditTerm);
 purchaseBook(10, 2, 4); // Purchase 2 books with a credit term of 4 months, when 10 books are in stock
